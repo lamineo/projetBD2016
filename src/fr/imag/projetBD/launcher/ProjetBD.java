@@ -8,6 +8,8 @@ public class ProjetBD {
 		
 		ConnexionBDD conn = new ConnexionBDD("serradla","bd2015","jdbc:oracle:thin:@im2ag-oracle.e.ujf-grenoble.fr:1521:ufrima");
 		conn.connectToServer();
+		conn.equals(conn);
+		
 	}
 
 }
