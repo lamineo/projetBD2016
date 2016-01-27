@@ -8,7 +8,6 @@ import fr.imag.projetBD.controller.LectureClavier;
 import fr.imag.projetBD.launcher.TestZoo;
 public class Feature4gestion {
 	
-	private int numImageAsupprimer;
 	
 	public Feature4gestion(){
 	}
@@ -25,7 +24,7 @@ public class Feature4gestion {
 			
 			if(listeFichierImage.next()){
 				Statement stmt2 = ConnexionBDD.CONNEXION.createStatement();
-				String reqGetCommandes = "select numcommande from commande where STATUTCOMMANDE='en cours' AND numcommande in ( select numcommande as commandeLieeAImage from tirage where numalbum in (select numalbum from photo where numimage=4))";
+				String reqGetCommandes = "select numcommande from commande where STATUTCOMMANDE='en cours' AND numcommande in ( select numcommande as commandeLieeAImage from tirage where numalbum in (select numalbum from photo where numimage="+numImage+"))";
 				ResultSet commandeContenantImage = stmt2.executeQuery(reqGetCommandes);	
 				
 				while(commandeContenantImage.next()){
