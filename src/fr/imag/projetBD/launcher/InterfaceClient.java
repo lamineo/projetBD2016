@@ -98,18 +98,46 @@ public class InterfaceClient {
 			if(this.resultat.next()){				
 				System.out.println("--------------Information relative aux clients--------------");
 				System.out.println("Numero Client	|	Nom	|	Prenom	|	Mail		|		Adresse  ");				
-				System.out.println("\t"+this.resultat.getInt(1)+"\t\t"+this.resultat.getString(3)+"\t\t"+
-						this.resultat.getString(4)+"\t\t\t"+this.resultat.getString(2)+"\t\t\t"+this.resultat.getString(6));
+				System.out.println("\t"+this.resultat.getInt(1)+"\t"+this.resultat.getString(3)+"\t"+
+						this.resultat.getString(4)+"\t\t"+this.resultat.getString(2)+"\t\t"+this.resultat.getString(6));
 				System.out.println("-------------- Liste Code promo --------------");
 				this.requete = "select * from codepromo where numclient="+numeroClient+"and utilise=1";
 				this.executerTransaction();
 				if(this.resultat.next()){
-					System.out.println("numero code promo "+this.resultat.getInt(1)+" avec une reduction de "+this.resultat.getFloat(3));
-				
+					System.out.println("numero code promo "+this.resultat.getInt(1)+" avec une reduction de "+this.resultat.getFloat(3)+"€");
+					while(this.resultat.next()){
+						System.out.println("numero code promo "+this.resultat.getInt(1)+" avec une reduction de "+this.resultat.getFloat(3)+"€");
+					}
 				}else{
 					System.out.println("Aucun code promo");
 					
 				}
+				System.out.println("-------------- Liste des images partagées --------------");
+				this.requete = "select * from fichierimage where numclient="+numeroClient+"and partage=1";
+				this.executerTransaction();				
+				if(this.resultat.next()){
+					System.out.println("numero image "+this.resultat.getInt(1)+", chemin : "+this.resultat.getString(3)+ ",resolution :"+this.resultat.getInt(5));
+					while(this.resultat.next()){
+						System.out.println("numero image "+this.resultat.getInt(1)+", chemin : "+this.resultat.getString(3)+ ",resolution :"+this.resultat.getInt(5));
+					}
+				}else{
+					System.out.println("Aucune image partagée");
+					
+				}
+				System.out.println("-------------- Liste des albums --------------");
+				this.requete = "select * from album where numclient="+numeroClient;
+				this.executerTransaction();				
+				while(this.resultat.next()){
+					System.out.println("numero Album "+this.resultat.getInt(1)+", Format : "+this.resultat.getInt(2));
+					String reqGetContentOfAlbum ="select * from photo where numalbum="+this.resultat.getInt(1);
+					Statement stmt3 = CONNECTION.createStatement();
+					ResultSet result = stmt3.executeQuery(reqGetContentOfAlbum);
+					System.out.println("\t-------------- Liste des photos dans l'album --------------");
+					while(result.next()){
+						System.out.println("\tNuméro photo : " +result.getInt(1)+" à la page "+result.getInt(2)+", Titre "+result.getInt(3)+ " ,commentaire :  ");
+					}
+				}
+				
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
